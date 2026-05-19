@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG to 3D GLB Visualizer</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Three.js from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/SVGLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/GLTFExporter.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+    <div id="ui-container">
+        <h1>Glyph 3D Visualizer</h1>
+        <div class="controls">
+            <input type="file" id="svg-input" accept=".svg" style="display: none;">
+            <button id="import-btn" class="btn">Import SVG</button>
+            <button id="export-btn" class="btn" disabled>Export GLB</button>
+            <div class="color-picker-container">
+                <label for="color-picker">Color:</label>
+                <input type="color" id="color-picker" value="#383000">
+            </div>
+            <div class="color-picker-container">
+                <label for="depth-input">Depth:</label>
+                <input type="number" id="depth-input" step="1" min="0" placeholder="Auto" style="width: 60px; background: #333; color: white; border: 1px solid #555; padding: 2px 5px; border-radius: 4px;">
+            </div>
+            <div class="color-picker-container">
+                <label for="hd-checkbox">HD Quality:</label>
+                <input type="checkbox" id="hd-checkbox" style="cursor: pointer;">
+            </div>
+        </div>
+        <div id="status">No SVG loaded.</div>
+    </div>
+    <div id="canvas-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
