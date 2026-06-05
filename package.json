@@ -1,0 +1,11 @@
+{
+  "name": "glyphs-3d-visualizer",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun run server.js"
+  },
+  "dependencies": {
+    "opentype.js": "^1.3.4"
+  }
+}

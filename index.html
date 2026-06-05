@@ -15,8 +15,8 @@
     <div id="ui-container">
         <h1>Glyph 3D Visualizer</h1>
         <div class="controls">
-            <input type="file" id="svg-input" accept=".svg" style="display: none;">
-            <button id="import-btn" class="btn">Import SVG</button>
+            <input type="file" id="svg-input" accept=".svg" multiple style="display: none;">
+            <button id="import-btn" class="btn">Import SVGs</button>
             <button id="export-btn" class="btn" disabled>Export GLB</button>
             <div class="color-picker-container">
                 <label for="color-picker">Color:</label>
@@ -30,11 +30,56 @@
                 <label for="hd-checkbox">HD Quality:</label>
                 <input type="checkbox" id="hd-checkbox" style="cursor: pointer;">
             </div>
+            <div id="nav-controls" style="display:none;margin-top:5px;">
+                <div style="display:flex;gap:4px;align-items:center;justify-content:center;">
+                    <button id="prev-btn" class="btn nav-btn">‹ Prev</button>
+                    <span id="nav-counter" class="nav-counter">1 / 1</span>
+                    <button id="next-btn" class="btn nav-btn">Next ›</button>
+                </div>
+                <button id="slideshow-btn" class="btn slideshow-btn">▶ Slideshow</button>
+            </div>
+            <hr style="border-color: #333; margin: 10px 0;">
+            <div style="font-size:14px;color:#ffd700;text-align:center;margin-bottom:6px;">Font Glyph Extraction</div>
+            <input type="file" id="font-input" accept=".otf,.ttf" style="display: none;">
+            <button id="extract-btn" class="btn">Extract Font Glyphs</button>
+            <div id="extract-status" style="font-size:12px;color:#aaa;text-align:center;margin-top:5px;">No font loaded.</div>
         </div>
         <div id="status">No SVG loaded.</div>
     </div>
     <div id="canvas-container"></div>
 
     <script src="app.js"></script>
+    <script>
+        const fontInput = document.getElementById('font-input');
+        const extractBtn = document.getElementById('extract-btn');
+        const extractStatus = document.getElementById('extract-status');
+
+        extractBtn.addEventListener('click', () => fontInput.click());
+
+        fontInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            extractStatus.textContent = 'Extracting glyphs...';
+            extractBtn.disabled = true;
+
+            const formData = new FormData();
+            formData.append('font', file);
+
+            try {
+                const res = await fetch('/extract', { method: 'POST', body: formData });
+                const result = await res.json();
+                if (result.success) {
+                    extractStatus.innerHTML = `Extracted ${result.count} glyphs to <strong style="color:#ffd700;">${result.path}</strong>`;
+                } else {
+                    extractStatus.textContent = 'Error: ' + result.error;
+                }
+            } catch (err) {
+                extractStatus.textContent = 'Error: ' + err.message;
+            } finally {
+                extractBtn.disabled = false;
+            }
+        });
+    </script>
 </body>
 </html>

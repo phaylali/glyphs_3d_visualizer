@@ -1,6 +1,9 @@
 // Global Three.js variables
 let scene, camera, renderer, objectGroup, controls;
 let currentSVGText = null;
+let loadedSVGs = [];
+let currentIndex = 0;
+let slideshowInterval = null;
 
 // Setup Scene
 function init() {
@@ -55,6 +58,9 @@ function init() {
 
     document.getElementById('svg-input').addEventListener('change', handleFileUpload);
     document.getElementById('export-btn').addEventListener('click', exportGLB);
+    document.getElementById('prev-btn').addEventListener('click', prevSVG);
+    document.getElementById('next-btn').addEventListener('click', nextSVG);
+    document.getElementById('slideshow-btn').addEventListener('click', toggleSlideshow);
 
     // Initialize Color Picker from Local Storage
     const savedColor = localStorage.getItem('glyphMaterialColor') || '#383000';
@@ -114,19 +120,88 @@ function handleColorChange(event) {
     }
 }
 
-// Handle SVG File Upload
+// Handle SVG File Upload (supports multiple files)
 function handleFileUpload(event) {
-    const file = event.target.files[0];
-    if (!file) return;
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
 
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        currentSVGText = e.target.result;
-        // Reset depth input to auto-calculate for new SVGs
+    const readers = Array.from(files).map(file =>
+        new Promise(resolve => {
+            const reader = new FileReader();
+            reader.onload = e => resolve({ text: e.target.result, name: file.name });
+            reader.readAsText(file);
+        })
+    );
+
+    Promise.all(readers).then(results => {
+        stopSlideshow();
+        loadedSVGs = results;
+        currentIndex = 0;
+        currentSVGText = results[0].text;
         document.getElementById('depth-input').value = '';
+        updateNavUI();
         loadSVG(currentSVGText);
-    };
-    reader.readAsText(file);
+    });
+}
+
+// — Navigation & Slideshow —
+
+function prevSVG() {
+    if (loadedSVGs.length === 0) return;
+    stopSlideshow();
+    currentIndex = (currentIndex - 1 + loadedSVGs.length) % loadedSVGs.length;
+    showCurrent();
+}
+
+function nextSVG() {
+    if (loadedSVGs.length === 0) return;
+    stopSlideshow();
+    currentIndex = (currentIndex + 1) % loadedSVGs.length;
+    showCurrent();
+}
+
+function showCurrent() {
+    if (loadedSVGs.length === 0) return;
+    currentSVGText = loadedSVGs[currentIndex].text;
+    document.getElementById('depth-input').value = '';
+    updateNavUI();
+    loadSVG(currentSVGText);
+}
+
+function toggleSlideshow() {
+    if (slideshowInterval) {
+        stopSlideshow();
+    } else {
+        startSlideshow();
+    }
+}
+
+function startSlideshow() {
+    if (loadedSVGs.length < 2) return;
+    document.getElementById('slideshow-btn').textContent = '\u23F8 Pause';
+    slideshowInterval = setInterval(() => {
+        currentIndex = (currentIndex + 1) % loadedSVGs.length;
+        showCurrent();
+    }, 2000);
+}
+
+function stopSlideshow() {
+    if (slideshowInterval) {
+        clearInterval(slideshowInterval);
+        slideshowInterval = null;
+    }
+    document.getElementById('slideshow-btn').textContent = '\u25B6 Slideshow';
+}
+
+function updateNavUI() {
+    const nav = document.getElementById('nav-controls');
+    if (loadedSVGs.length > 1) {
+        nav.style.display = 'block';
+        document.getElementById('nav-counter').textContent =
+            (currentIndex + 1) + ' / ' + loadedSVGs.length;
+    } else {
+        nav.style.display = 'none';
+    }
 }
 
 // Convert SVG string to 3D Geometry
@@ -271,13 +346,18 @@ function loadSVG(svgText) {
     // Restore rotation
     objectGroup.rotation.y = oldRotY;
 
-    document.getElementById('status').innerText = 'SVG successfully converted.';
+    const name = loadedSVGs[currentIndex] ? loadedSVGs[currentIndex].name : 'SVG';
+    document.getElementById('status').innerText = '\u2713 ' + name;
     document.getElementById('export-btn').disabled = false;
 }
 
 // Export to GLB
 function exportGLB() {
     if (objectGroup.children.length === 0) return;
+
+    const name = loadedSVGs[currentIndex]
+        ? loadedSVGs[currentIndex].name.replace(/\.svg$/i, '') + '.glb'
+        : 'glyph.glb';
 
     const exporter = new THREE.GLTFExporter();
     exporter.parse(objectGroup, function (gltf) {
@@ -287,7 +367,7 @@ function exportGLB() {
         const link = document.createElement('a');
         link.style.display = 'none';
         link.href = url;
-        link.download = 'glyph.glb';
+        link.download = name;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);

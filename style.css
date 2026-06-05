@@ -87,6 +87,26 @@ h1 {
     padding: 0;
 }
 
+.nav-btn {
+    padding: 5px 10px !important;
+    font-size: 12px !important;
+    flex: 1;
+}
+
+.nav-counter {
+    font-size: 13px;
+    color: #ddd;
+    min-width: 60px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+.slideshow-btn {
+    font-size: 12px !important;
+    padding: 6px 10px !important;
+    margin-top: 4px;
+}
+
 #status {
     margin-top: 15px;
     font-size: 12px;

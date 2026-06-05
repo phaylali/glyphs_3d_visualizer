@@ -12,8 +12,10 @@
 - [x] UI depth input and automatic depth calculation based on SVG dimensions.
 - [x] Advanced invisible path filtering (ignores display="none", hidden, and white backgrounds).
 - [x] HD Quality toggle to vastly increase geometry curve density for smoother paths.
+- [x] Font glyph extraction — upload .otf/.ttf, exports every glyph as SVG into `input/[FontName]Glyphs/`.
+- [x] Multi-SVG import — select multiple .svg files at once.
+- [x] Slideshow mode — cycles through loaded SVGs every 2 seconds with play/pause.
+- [x] Navigation controls — prev / next buttons with counter, per-glyph export naming.
 
 ## Future Enhancements
-- [ ] Support importing multiple SVGs at once.
-- [ ] Implement a "slideshow" mode (giving each SVG ~2 seconds on screen).
 - [ ] Adjust material properties (roughness, metalness) via sliders.

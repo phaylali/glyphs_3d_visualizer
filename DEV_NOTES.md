@@ -9,6 +9,12 @@ The application uses a pure-frontend approach to handle the 3D processing. This 
 - **3D Extrusion:** `THREE.ExtrudeGeometry` takes these shapes and adds depth and beveling.
 - **Exporting:** `THREE.GLTFExporter` traverses the scene graph and serializes the 3D meshes into a binary GLB blob, which is then dynamically downloaded by the browser.
 
+## Server-Side: Font Glyph Extraction
+- **Endpoint** `POST /extract` accepts a `.otf`/`.ttf` file via multipart form.
+- **Parsing** uses `opentype.js` — iterates every glyph index, converts to SVG path via `glyph.getPath()`, and writes individual SVGs.
+- **Output** Saved to `input/[FontName]Glyphs/` so extracted SVGs are immediately available for 3D conversion.
+- **Naming** Files named by Unicode hex (e.g. `0041.svg`), falling back to glyph name or index.
+
 ## Limitations & Considerations
 - **SVG Complexity:** Font SVGs can have very complex path intersections. `ExtrudeGeometry` usually handles standard `d` attributes well, but SVGs with heavy overlapping paths or missing `fill-rule` properties might extrude with missing faces.
 - **Coordinates:** SVG coordinates are inverted compared to WebGL (Y goes down in SVG, up in WebGL). The `app.js` handles this by scaling `y` by `-1`.
