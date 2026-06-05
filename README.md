@@ -45,3 +45,26 @@ A browser-based tool to convert SVG font glyphs into spinning 3D objects and exp
 - **Material** — Change Color, Roughness, or Metalness at any time.
 - **Export** — Click Export GLB to download the currently viewed glyph.
 - **Extract Font** — Click Extract Font Glyphs, choose a `.otf`/`.ttf` file.
+
+
+---
+
+## Support Us
+
+<p align="center">
+  <a href="https://ko-fi.com/omniversify">
+    <img src="https://raw.githubusercontent.com/phaylali/Omniversify/main/public/images/kofi_logo.svg" width="200" alt="Ko-Fi" />
+  </a>
+</p>
+
+<p align="center">
+  <strong>Keep us going</strong>
+</p>
+
+---
+
+&copy; 2026 [Omniversify](https://omniversify.com). All rights reserved.
+
+_Made by Moroccans, for the Omniverse_
+
+[![ReadMeSupportPalestine](https://raw.githubusercontent.com/Safouene1/support-palestine-banner/master/banner-project.svg)](https://donate.unrwa.org/-landing-page/en_EN)
