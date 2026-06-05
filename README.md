@@ -1,14 +1,27 @@
 # Glyphs 3D Visualizer
 
-A lightweight tool to convert SVG font glyphs into spinning 3D objects in the GLB format.
+A browser-based tool to convert SVG font glyphs into spinning 3D objects and export them as `.glb` files. Includes font glyph extraction from `.otf`/`.ttf` files.
 
 ## Features
-- Import a single SVG file.
-- Automatically extrudes the 2D path into a 3D geometry.
-- Applies a reflective gold material.
-- Spins the model horizontally in the browser.
-- Export the resulting 3D model as a `.glb` file.
-- Extract individual glyph SVGs from `.otf`/`.ttf` font files — saved to `input/` for immediate 3D conversion.
+
+### 3D Conversion
+- Import one or more SVG files (multi-select supported).
+- Auto-extrudes 2D paths into 3D geometry with configurable depth.
+- HD Quality toggle for smoother curves.
+- Adjustable material: color picker + roughness/metalness sliders.
+- OrbitControls: pan, zoom, rotate around the model.
+- Horizontal spin animation.
+- Export any glyph as `.glb`.
+
+### Multi-SVG & Slideshow
+- Load multiple SVGs at once and navigate with prev/next buttons.
+- Slideshow mode cycles through glyphs at a configurable speed (0.5s+).
+- Current glyph name displayed prominently in the UI.
+
+### Font Glyph Extraction
+- Upload `.otf` or `.ttf` font files.
+- Every glyph is exported as an individual SVG into `input/[FontName]Glyphs/`.
+- Files named by Unicode hex (e.g. `0041.svg`) — ready for immediate 3D import.
 
 ## Requirements
 - [Bun](https://bun.sh/) installed on your system.
@@ -23,13 +36,12 @@ A lightweight tool to convert SVG font glyphs into spinning 3D objects in the GL
    ```bash
    bun run dev
    ```
-4. Open your browser and navigate to `http://localhost:3000`.
-5. Click "Import SVG" and select a glyph SVG file.
-6. Watch the spinning 3D gold object!
-7. Click "Export GLB" to download the model.
+4. Open your browser to `http://localhost:3000`.
 
-## Font Glyph Extraction
-1. Click "Extract Font Glyphs" in the UI.
-2. Select an `.otf` or `.ttf` font file.
-3. All glyphs are exported as individual SVGs into `input/[FontName]Glyphs/`.
-4. Use "Import SVG" to pick any extracted glyph and convert it to 3D.
+## Usage
+- **Import SVGs** — Click the button, select one or more `.svg` files.
+- **Navigate** — Use ‹ Prev / Next › buttons (appear when 2+ SVGs loaded).
+- **Slideshow** — Click ▶ Slideshow, adjust speed with the Speed (s) field.
+- **Material** — Change Color, Roughness, or Metalness at any time.
+- **Export** — Click Export GLB to download the currently viewed glyph.
+- **Extract Font** — Click Extract Font Glyphs, choose a `.otf`/`.ttf` file.

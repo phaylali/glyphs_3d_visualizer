@@ -61,12 +61,23 @@ function init() {
     document.getElementById('prev-btn').addEventListener('click', prevSVG);
     document.getElementById('next-btn').addEventListener('click', nextSVG);
     document.getElementById('slideshow-btn').addEventListener('click', toggleSlideshow);
+    document.getElementById('speed-input').addEventListener('change', handleSpeedChange);
 
     // Initialize Color Picker from Local Storage
     const savedColor = localStorage.getItem('glyphMaterialColor') || '#383000';
     const colorPicker = document.getElementById('color-picker');
     colorPicker.value = savedColor;
     colorPicker.addEventListener('input', handleColorChange);
+
+    // Initialize Roughness / Metalness sliders
+    const roughnessSlider = document.getElementById('roughness-slider');
+    const metalnessSlider = document.getElementById('metalness-slider');
+    roughnessSlider.value = localStorage.getItem('glyphRoughness') || '0.2';
+    metalnessSlider.value = localStorage.getItem('glyphMetalness') || '0.8';
+    document.getElementById('roughness-value').textContent = roughnessSlider.value;
+    document.getElementById('metalness-value').textContent = metalnessSlider.value;
+    roughnessSlider.addEventListener('input', handleRoughnessChange);
+    metalnessSlider.addEventListener('input', handleMetalnessChange);
 
     // Depth Input listener
     const depthInput = document.getElementById('depth-input');
@@ -120,6 +131,28 @@ function handleColorChange(event) {
     }
 }
 
+function handleRoughnessChange(event) {
+    const val = event.target.value;
+    localStorage.setItem('glyphRoughness', val);
+    document.getElementById('roughness-value').textContent = val;
+    if (objectGroup && objectGroup.children.length > 0) {
+        objectGroup.children.forEach(mesh => {
+            if (mesh.material) mesh.material.roughness = parseFloat(val);
+        });
+    }
+}
+
+function handleMetalnessChange(event) {
+    const val = event.target.value;
+    localStorage.setItem('glyphMetalness', val);
+    document.getElementById('metalness-value').textContent = val;
+    if (objectGroup && objectGroup.children.length > 0) {
+        objectGroup.children.forEach(mesh => {
+            if (mesh.material) mesh.material.metalness = parseFloat(val);
+        });
+    }
+}
+
 // Handle SVG File Upload (supports multiple files)
 function handleFileUpload(event) {
     const files = event.target.files;
@@ -142,6 +175,13 @@ function handleFileUpload(event) {
         updateNavUI();
         loadSVG(currentSVGText);
     });
+}
+
+function handleSpeedChange() {
+    if (slideshowInterval) {
+        stopSlideshow();
+        startSlideshow();
+    }
 }
 
 // — Navigation & Slideshow —
@@ -178,11 +218,12 @@ function toggleSlideshow() {
 
 function startSlideshow() {
     if (loadedSVGs.length < 2) return;
+    const speed = parseFloat(document.getElementById('speed-input').value) || 2;
     document.getElementById('slideshow-btn').textContent = '\u23F8 Pause';
     slideshowInterval = setInterval(() => {
         currentIndex = (currentIndex + 1) % loadedSVGs.length;
         showCurrent();
-    }, 2000);
+    }, speed * 1000);
 }
 
 function stopSlideshow() {
@@ -232,8 +273,8 @@ function loadSVG(svgText) {
     // Create Material
     const material = new THREE.MeshStandardMaterial({
         color: new THREE.Color(currentColor),
-        metalness: 0.8,
-        roughness: 0.2,
+        metalness: parseFloat(document.getElementById('metalness-slider').value),
+        roughness: parseFloat(document.getElementById('roughness-slider').value),
         side: THREE.DoubleSide
     });
 
@@ -347,6 +388,7 @@ function loadSVG(svgText) {
     objectGroup.rotation.y = oldRotY;
 
     const name = loadedSVGs[currentIndex] ? loadedSVGs[currentIndex].name : 'SVG';
+    document.getElementById('current-name').textContent = name;
     document.getElementById('status').innerText = '\u2713 ' + name;
     document.getElementById('export-btn').disabled = false;
 }

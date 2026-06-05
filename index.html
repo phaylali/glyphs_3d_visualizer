@@ -14,6 +14,7 @@
 <body>
     <div id="ui-container">
         <h1>Glyph 3D Visualizer</h1>
+        <div id="current-name" style="text-align:center;font-size:15px;color:#ffd700;margin-bottom:8px;word-break:break-all;"></div>
         <div class="controls">
             <input type="file" id="svg-input" accept=".svg" multiple style="display: none;">
             <button id="import-btn" class="btn">Import SVGs</button>
@@ -21,6 +22,16 @@
             <div class="color-picker-container">
                 <label for="color-picker">Color:</label>
                 <input type="color" id="color-picker" value="#383000">
+            </div>
+            <div class="slider-container">
+                <label for="roughness-slider">Roughness:</label>
+                <input type="range" id="roughness-slider" min="0" max="1" step="0.01" value="0.2">
+                <span id="roughness-value" class="slider-value">0.20</span>
+            </div>
+            <div class="slider-container">
+                <label for="metalness-slider">Metalness:</label>
+                <input type="range" id="metalness-slider" min="0" max="1" step="0.01" value="0.8">
+                <span id="metalness-value" class="slider-value">0.80</span>
             </div>
             <div class="color-picker-container">
                 <label for="depth-input">Depth:</label>
@@ -37,6 +48,10 @@
                     <button id="next-btn" class="btn nav-btn">Next ›</button>
                 </div>
                 <button id="slideshow-btn" class="btn slideshow-btn">▶ Slideshow</button>
+                <div class="color-picker-container" style="margin-top:4px;">
+                    <label for="speed-input">Speed (s):</label>
+                    <input type="number" id="speed-input" step="0.5" min="0.5" value="2" style="width:55px;background:#333;color:white;border:1px solid #555;padding:2px 5px;border-radius:4px;">
+                </div>
             </div>
             <hr style="border-color: #333; margin: 10px 0;">
             <div style="font-size:14px;color:#ffd700;text-align:center;margin-bottom:6px;">Font Glyph Extraction</div>
