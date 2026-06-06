@@ -1,6 +1,6 @@
 # Glyphs 3D Visualizer
 
-A browser-based tool to convert SVG font glyphs into spinning 3D objects and export them as `.glb` files. Includes font glyph extraction from `.otf`/`.ttf` files.
+A browser-based tool to convert SVG font glyphs into spinning 3D objects and export them as `.glb` files. Includes font glyph extraction from `.otf`/`.ttf` files and a coin generator that produces 3D coins from front/back images via Blender CLI.
 
 ## Features
 
@@ -23,19 +23,30 @@ A browser-based tool to convert SVG font glyphs into spinning 3D objects and exp
 - Every glyph is exported as an individual SVG into `input/[FontName]Glyphs/`.
 - Files named by Unicode hex (e.g. `0041.svg`) — ready for immediate 3D import.
 
+### Coin Generator
+- Upload front and back images (PNG with alpha channel).
+- Server-side Blender CLI extracts the alpha contour, builds a 3D mesh, and returns a GLB.
+- Configurable coin width, height, and depth.
+- Auto-loads default coin (gold front / silver back) on startup.
+- Three materials: front texture, back texture, solid-color edge.
+
 ## Requirements
 - [Bun](https://bun.sh/) installed on your system.
+- Blender 5.1+ (for coin generation). Install via:
+  ```bash
+  sudo apt install blender
+  ```
 
 ## How to Run
 1. Open your terminal in this directory.
 2. Install dependencies:
-   ```bash
-   bun install
-   ```
+    ```bash
+    bun install
+    ```
 3. Run the server:
-   ```bash
-   bun run dev
-   ```
+    ```bash
+    bun run dev
+    ```
 4. Open your browser to `http://localhost:3000`.
 
 ## Usage
@@ -45,6 +56,7 @@ A browser-based tool to convert SVG font glyphs into spinning 3D objects and exp
 - **Material** — Change Color, Roughness, or Metalness at any time.
 - **Export** — Click Export GLB to download the currently viewed glyph.
 - **Extract Font** — Click Extract Font Glyphs, choose a `.otf`/`.ttf` file.
+- **Generate Coin** — Click Front Image / Back Image to select images, then Generate Coin. Default coin loads automatically.
 
 
 ---
