@@ -23,12 +23,13 @@ A browser-based tool to convert SVG font glyphs into spinning 3D objects and exp
 - Every glyph is exported as an individual SVG into `input/[FontName]Glyphs/`.
 - Files named by Unicode hex (e.g. `0041.svg`) — ready for immediate 3D import.
 
-### Coin Generator
+### Coin Generator — WIP (needs rework)
 - Upload front and back images (PNG with alpha channel).
 - Server-side Blender CLI extracts the alpha contour, builds a 3D mesh, and returns a GLB.
 - Configurable coin width, height, and depth.
 - Auto-loads default coin (gold front / silver back) on startup.
 - Three materials: front texture, back texture, solid-color edge.
+- **Note:** side geometry still has visible distortion; the feature is under active development.
 
 ## Requirements
 - [Bun](https://bun.sh/) installed on your system.

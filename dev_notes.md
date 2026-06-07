@@ -1,6 +1,8 @@
 # Dev Notes
 
-## 2026-06-06 — Coin Generator (Blender CLI backend)
+## 2026-06-06 — Coin Generator (Blender CLI backend) — WIP
+
+**Status: needs rework.** The side walls still appear distorted. The contour extraction, circle fitting, bevel, normal threshold, and camera orientation have been iterated on but the visual result is not acceptable yet.
 
 ### Architecture change
 The coin generator no longer uses client-side Three.js extrusion. Instead, images are POSTed to the server, which spawns `blender --background --python scripts/coin_from_images.py` headlessly to produce a GLB with embedded textures.
@@ -58,6 +60,9 @@ The coin generator no longer uses client-side Three.js extrusion. Instead, image
 - Coin_Back: back image texture, roughness=0.3, metalness=0.5
 - Coin_Edge: solid color (dominant color from front image), roughness=0.4, metalness=0.7
 - All materials: `use_backface_culling = False` (double-sided for glTF)
+
+### Still broken
+- Side walls appear distorted despite circle fitting, reduced bevel, and higher normal threshold. Likely causes: UV mapping on bevel/transitional faces, or the interaction between the bevel modifier and the normal-based material classification.
 
 ### Fixes applied
 
